@@ -58,7 +58,7 @@ class PdfBookHooks {
 					while ( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
 				}
 				else {
-					$text = $article->fetchContent();
+					$text = $article->getPage()->getContent()->getNativeData();
 					$text = $wgParser->preprocess( $text, $title, $opt );
 					if( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) )
 						foreach( $links[1] as $link ) $articles[] = Title::newFromText( $link );
@@ -77,7 +77,7 @@ class PdfBookHooks {
 				$ttext = $title->getPrefixedText();
 				if( !in_array( $ttext, $exclude ) ) {
 					$article = new Article( $title );
-					$text    = $article->fetchContent();
+					$text    = $article->getPage()->getContent()->getNativeData();
 					$text    = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); # preserve HTML comments
 					if( $format != 'single' ) $text .= "__NOTOC__";
 					$opt->setEditSection( false );    # remove section-edit links

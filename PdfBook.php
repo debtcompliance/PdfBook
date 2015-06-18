@@ -10,13 +10,13 @@
  * 
  * @file
  * @ingroup Extensions
- * @author Aran Dunkley [http://www.organicdesign.co.nz/nad User:Nad]
- * @copyright © 2007 Aran Dunkley
+ * @author Aran Dunkley (http://www.organicdesign.co.nz/aran)
+ * @copyright © 2007-2015 Aran Dunkley
  * @licence GNU General Public Licence 2.0 or later
  */
 if( !defined( 'MEDIAWIKI' ) ) die( "Not an entry point." );
 
-define( 'PDFBOOK_VERSION', "1.2.3, 2013-09-19" );
+define( 'PDFBOOK_VERSION', "1.2.4, 2015-06-18" );
 
 $dir = dirname( __FILE__ );
 $wgAutoloadClasses['PdfBookHooks'] = $dir . '/PdfBook.hooks.php';
@@ -25,7 +25,7 @@ $wgExtensionMessagesFiles['PdfBook'] = $dir . '/PdfBook.i18n.php';
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => "PdfBook",
-	'author'         => "[http://www.organicdesign.co.nz/nad Aran Dunkley]",
+	'author'         => "[http://www.organicdesign.co.nz/aran Aran Dunkley]",
 	'url'            => "http://www.mediawiki.org/wiki/Extension:PdfBook",
 	'version'        => PDFBOOK_VERSION,
 	'descriptionmsg' => 'pdfbook-desc',
