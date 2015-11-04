@@ -15,6 +15,7 @@ class PdfBookHooks {
 			$cache = $wgUploadDirectory . '/pdf-book-cache' . md5( json_encode( $_GET ) );
 
 			$title = $article->getTitle();
+			$book = $title->getText();
 			$opt = ParserOptions::newFromUser( $wgUser );
 
 			// Log the export
@@ -72,7 +73,6 @@ class PdfBookHooks {
 				}
 
 				// Format the article(s) as a single HTML document with absolute URL's
-				$book = $title->getText();
 				$html = '';
 				$wgArticlePath = $wgServer.$wgArticlePath;
 				$wgPdfBookTab  = false;
@@ -123,7 +123,7 @@ class PdfBookHooks {
 					$cmd .= "$toc --no-title --format pdf14 --numbered $layout $width";
 					$cmd  = "htmldoc -t pdf --charset $charset $options $cmd $file";
 					putenv( "HTMLDOC_NOCGI=1" );
-					shell_exec( $cmd > $cache );
+					shell_exec( "$cmd > $cache" );
 					@unlink( $file );
 				}
 			}
