@@ -9,7 +9,7 @@ class PdfBookHooks {
 		global $wgOut, $wgUser, $wgParser, $wgRequest, $wgAjaxComments, $wgPdfBookDownload;
 		global $wgServer, $wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory, $wgScript;
 
-		if( $action == 'pdfbook' && $wgUser->isLoggedIn() ) {
+		if( $action == 'pdfbook' ) {
 
 			$title = $article->getTitle();
 			$opt = ParserOptions::newFromUser( $wgUser );
