@@ -14,38 +14,38 @@ class PdfBookHooks {
 			// Create a cache filename from the query-string parameters
 			$cache = $wgUploadDirectory . '/pdf-book-cache' . md5( json_encode( $_GET ) );
 
+			$title = $article->getTitle();
+			$opt = ParserOptions::newFromUser( $wgUser );
+
+			// Log the export
+			$msg = wfMsg( 'pdfbook-log', $wgUser->getUserPage()->getPrefixedText() );
+			$log = new LogPage( 'pdf', false );
+			$log->addEntry( 'book', $article->getTitle(), $msg );
+
+			// Initialise PDF variables
+			$format   = $wgRequest->getText( 'format' );
+			$notitle  = $wgRequest->getText( 'notitle' );
+			$comments = $wgAjaxComments ? $wgRequest->getText( 'comments' ) : '';
+			$layout   = $format == 'single' ? '--webpage' : '--firstpage toc';
+			$charset  = self::setProperty( 'Charset',     'iso-8859-1' );
+			$left     = self::setProperty( 'LeftMargin',  '1cm' );
+			$right    = self::setProperty( 'RightMargin', '1cm' );
+			$top      = self::setProperty( 'TopMargin',   '1cm' );
+			$bottom   = self::setProperty( 'BottomMargin','1cm' );
+			$font     = self::setProperty( 'Font',        'Arial' );
+			$size     = self::setProperty( 'FontSize',    '8' );
+			$ls       = self::setProperty( 'LineSpacing', 1 );
+			$linkcol  = self::setProperty( 'LinkColour',  '217A28' );
+			$levels   = self::setProperty( 'TocLevels',   '2' );
+			$exclude  = self::setProperty( 'Exclude',     array() );
+			$width    = self::setProperty( 'Width',       '' );
+			$options  = self::setProperty( 'Options',     '' );
+			$width    = $width ? "--browserwidth $width" : '';
+			if( !is_array( $exclude ) ) $exclude = split( '\\s*,\\s*', $exclude );
+	 
 			// If the file doesn't exist, render the content now
 			if( !file_exists( $cache ) ) {
 
-				$title = $article->getTitle();
-				$opt = ParserOptions::newFromUser( $wgUser );
-
-				// Log the export
-				$msg = wfMsg( 'pdfbook-log', $wgUser->getUserPage()->getPrefixedText() );
-				$log = new LogPage( 'pdf', false );
-				$log->addEntry( 'book', $article->getTitle(), $msg );
-
-				// Initialise PDF variables
-				$format   = $wgRequest->getText( 'format' );
-				$notitle  = $wgRequest->getText( 'notitle' );
-				$comments = $wgAjaxComments ? $wgRequest->getText( 'comments' ) : '';
-				$layout   = $format == 'single' ? '--webpage' : '--firstpage toc';
-				$charset  = self::setProperty( 'Charset',     'iso-8859-1' );
-				$left     = self::setProperty( 'LeftMargin',  '1cm' );
-				$right    = self::setProperty( 'RightMargin', '1cm' );
-				$top      = self::setProperty( 'TopMargin',   '1cm' );
-				$bottom   = self::setProperty( 'BottomMargin','1cm' );
-				$font     = self::setProperty( 'Font',        'Arial' );
-				$size     = self::setProperty( 'FontSize',    '8' );
-				$ls       = self::setProperty( 'LineSpacing', 1 );
-				$linkcol  = self::setProperty( 'LinkColour',  '217A28' );
-				$levels   = self::setProperty( 'TocLevels',   '2' );
-				$exclude  = self::setProperty( 'Exclude',     array() );
-				$width    = self::setProperty( 'Width',       '' );
-				$options  = self::setProperty( 'Options',     '' );
-				$width    = $width ? "--browserwidth $width" : '';
-				if( !is_array( $exclude ) ) $exclude = split( '\\s*,\\s*', $exclude );
-	 
 				// Select articles from members if a category or links in content if not
 				if( $format == 'single' ) $articles = array( $title );
 				else {
