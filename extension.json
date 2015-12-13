@@ -6,7 +6,7 @@
 	"description": "pdfbook-desc",
 	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
 	"type": "parserhook",
-	"callback": "PdfBook::onRegistration",
+	"callback": "PdfBookHooks::onRegistration",
 	"config": {
 		"wgPdfBookTab": false,           "@": "Whether or not an action tab is wanted for printing to PDF",
 		"wgPdfBookDownload": true,       "@": "Whether the files should be downloaded or view in-browser"
