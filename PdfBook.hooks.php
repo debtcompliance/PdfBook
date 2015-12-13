@@ -2,6 +2,14 @@
 
 class PdfBookHooks {
 
+	public static function onRegistration() {
+		global $wgLogTypes, $wgLogNames, $wgLogHeaders, $wgLogActions;
+		$wgLogTypes[]             = 'pdf';
+		$wgLogNames  ['pdf']      = 'pdflogpage';
+		$wgLogHeaders['pdf']      = 'pdflogpagetext';
+		$wgLogActions['pdf/book'] = 'pdflogentry';
+	}
+
 	/**
 	 * Perform the export operation
 	 */
