@@ -129,9 +129,9 @@ class PdfBookHooks {
 					$cmd .= " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color";
 					$cmd .= " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol";
 					$cmd .= "$toc --no-title --format pdf14 --numbered $layout $width";
-					$cmd  = "htmldoc -t pdf --charset $charset $options $cmd $file";
+					$cmd  = "htmldoc -t pdf --charset $charset $options $cmd \"$file\"";
 					putenv( "HTMLDOC_NOCGI=1" );
-					shell_exec( "$cmd > $cache" );
+					shell_exec( "$cmd > \"$cache\"" );
 					@unlink( $file );
 				}
 			}
