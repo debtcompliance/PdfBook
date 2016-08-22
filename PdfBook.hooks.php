@@ -126,20 +126,21 @@ class PdfBookHooks {
 
 					// Write the HTML to a tmp file
 					if( !is_dir( $wgUploadDirectory ) ) mkdir( $wgUploadDirectory );
-					$file = "$wgUploadDirectory/" . uniqid( 'pdf-book' );
+					$file = $wgUploadDirectory . '/' . uniqid( 'pdf-book' );
 					file_put_contents( $file, $html );
 
+					// Build the htmldoc command
 					$footer = $format == 'single' ? "..." : ".1.";
-					$toc    = $format == 'single' ? "" : " --toclevels $levels";
-
-					// Send the file to the client via htmldoc converter
+					$toc = $format == 'single' ? "" : " --toclevels $levels";
 					$cmd  = "--left $left --right $right --top $top --bottom $bottom"
 						. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
 						. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
 						. "$toc --no-title --numbered --charset $charset $options $layout $width";
-					$cmd .= $format == 'htmltoc'
+					$cmd = $format == 'htmltoc'
 						? "htmldoc -t html --format html $cmd $file"
 						: "htmldoc -t pdf --format pdf14 $cmd $file";
+
+					// Execute the command outputting to the cache file
 					putenv( "HTMLDOC_NOCGI=1" );
 					shell_exec( "$cmd > \"$cache\"" );
 					unlink( $file );
