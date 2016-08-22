@@ -33,6 +33,7 @@ class PdfBookHooks {
 
 			// Initialise PDF variables
 			$format   = $wgRequest->getText( 'format' );
+			$nothumbs = $wgRequest->getText( 'nothumbs' );
 			$notitle  = $wgRequest->getText( 'notitle' );
 			$comments = $wgAjaxComments ? $wgRequest->getText( 'comments' ) : '';
 			$layout   = $format == 'single' ? '--webpage' : '--firstpage toc';
@@ -98,6 +99,7 @@ class PdfBookHooks {
 						$out     = $wgParser->parse( $text, $title, $opt, true, true );
 						$text    = $out->getText();
 						$text    = preg_replace( "|(<img[^>]+?src=\")(/.+?>)|", "$1$wgServer$2", $text );      # make image urls absolute
+						if( $nothumbs == 'true') $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); # Convert image links from thumbnail to full-size
 						$text    = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); # non-printable areas
 						$text    = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  # HTML comments hack
 						$ttext   = basename( $ttext );
@@ -132,7 +134,7 @@ class PdfBookHooks {
 					$cmd  = "htmldoc -t pdf --charset $charset $options $cmd \"$file\"";
 					putenv( "HTMLDOC_NOCGI=1" );
 					shell_exec( "$cmd > \"$cache\"" );
-					@unlink( $file );
+					unlink( $file );
 				}
 			}
 
@@ -147,6 +149,7 @@ class PdfBookHooks {
 				else header( "Content-Disposition: inline; filename=\"$book.pdf\"" );
 			}
 			readfile( $cache );
+
 			return false;
 		}
 		return true;
