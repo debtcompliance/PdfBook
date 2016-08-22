@@ -133,11 +133,13 @@ class PdfBookHooks {
 					$toc    = $format == 'single' ? "" : " --toclevels $levels";
 
 					// Send the file to the client via htmldoc converter
-					$cmd  = "--left $left --right $right --top $top --bottom $bottom";
-					$cmd .= " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color";
-					$cmd .= " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol";
-					$cmd .= "$toc --no-title --format pdf14 --numbered $layout $width";
-					$cmd  = "htmldoc -t pdf --charset $charset $options $cmd \"$file\"";
+					$cmd  = "--left $left --right $right --top $top --bottom $bottom"
+						. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
+						. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
+						. "$toc --no-title --numbered --charset $charset $options $layout $width";
+					$cmd .= $format == 'htmltoc'
+						? "htmldoc -t html --format html $cmd $file"
+						: "htmldoc -t pdf --format pdf14 $cmd $file";
 					putenv( "HTMLDOC_NOCGI=1" );
 					shell_exec( "$cmd > \"$cache\"" );
 					unlink( $file );
@@ -146,7 +148,7 @@ class PdfBookHooks {
 
 			// Output the cache file
 			$wgOut->disable();
-			if( $format == 'html' ) {
+			if( $format == 'html' || $format == 'htmltoc' ) {
 				header( "Content-Type: text/html" );
 				header( "Content-Disposition: attachment; filename=\"$book.html\"" );
 			} else {
