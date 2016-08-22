@@ -57,7 +57,7 @@ class PdfBookHooks {
 			if( !file_exists( $cache ) ) {
 
 				// Select articles from members if a category or links in content if not
-				if( $format == 'single' ) $articles = array( $title );
+				if( $format == 'single' || $format == 'html' ) $articles = array( $title );
 				else {
 					$articles = array();
 					if( $title->getNamespace() == NS_CATEGORY ) {
@@ -93,15 +93,21 @@ class PdfBookHooks {
 					if( !in_array( $ttext, $exclude ) ) {
 						$article = new Article( $title );
 						$text    = $article->getPage()->getContent()->getNativeData();
-						$text    = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); # preserve HTML comments
+						$text    = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );            // preserve HTML comments
 						if( $format != 'single' ) $text .= "__NOTOC__";
-						$opt->setEditSection( false );    # remove section-edit links
+						$opt->setEditSection( false );                                                             // remove section-edit links
 						$out     = $wgParser->parse( $text, $title, $opt, true, true );
 						$text    = $out->getText();
-						$text    = preg_replace( "|(<img[^>]+?src=\")(/.+?>)|", "$1$wgServer$2", $text );      # make image urls absolute
-						if( $nothumbs == 'true') $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); # Convert image links from thumbnail to full-size
-						$text    = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); # non-printable areas
-						$text    = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  # HTML comments hack
+						if( $format == 'html' ) {
+							$text    = preg_replace( "|(<img[^>]+?src=\")(/.+?>)|", "$1$wgServer$2", $text );      // make image urls absolute
+						} else {
+							$pUrl    = parse_url( $wgScriptPath ) ;
+							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
+							$text    = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
+						}
+						if( $nothumbs == 'true') $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); // Convert image links from thumbnail to full-size
+						$text    = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text );     // non-printable areas
+						$text    = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                      // HTML comments hack
 						$ttext   = basename( $ttext );
 						$h1      = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
