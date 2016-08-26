@@ -32,10 +32,10 @@ class PdfBookHooks {
 			$log->addEntry( 'book', $article->getTitle(), $msg );
 
 			// Initialise PDF variables
-			$format   = $wgRequest->getText( 'format' );
-			$nothumbs = $wgRequest->getText( 'nothumbs' );
-			$notitle  = $wgRequest->getText( 'notitle' );
-			$comments = $wgAjaxComments ? $wgRequest->getText( 'comments' ) : '';
+			$format   = self::setProperty( 'format', '', '' );
+			$nothumbs = self::setProperty( 'nothumbs', '', '' );
+			$notitle  = self::setProperty( 'notitle', '', '' );
+			$comments = $wgAjaxComments ? self::setProperty( 'comments', '', false ) : '';
 			$layout   = $format == 'single' ? '--webpage' : '--firstpage toc';
 			$charset  = self::setProperty( 'Charset',     'iso-8859-1' );
 			$left     = self::setProperty( 'LeftMargin',  '1cm' );
@@ -51,8 +51,8 @@ class PdfBookHooks {
 			$width    = self::setProperty( 'Width',       '' );
 			$options  = self::setProperty( 'Options',     '' );
 			$width    = $width ? "--browserwidth $width" : '';
-			if( !is_array( $exclude ) ) $exclude = split( '\\s*,\\s*', $exclude );
-	 
+			if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
+ 
 			// If the file doesn't exist, render the content now
 			if( !file_exists( $cache ) ) {
 
@@ -83,11 +83,11 @@ class PdfBookHooks {
 
 				// Format the article(s) as a single HTML document with absolute URL's
 				$html = '';
-				$wgArticlePath = $wgServer.$wgArticlePath;
+				$wgArticlePath = $wgServer . $wgArticlePath;
 				$wgPdfBookTab  = false;
-				$wgScriptPath  = $wgServer.$wgScriptPath;
-				$wgUploadPath  = $wgServer.$wgUploadPath;
-				$wgScript      = $wgServer.$wgScript;
+				$wgScriptPath  = $wgServer . $wgScriptPath;
+				$wgUploadPath  = $wgServer . $wgUploadPath;
+				$wgScript      = $wgServer . $wgScript;
 				foreach( $articles as $title ) {
 					$ttext = $title->getPrefixedText();
 					if( !in_array( $ttext, $exclude ) ) {
@@ -164,18 +164,16 @@ class PdfBookHooks {
 		return true;
 	}
 
-
 	/**
-	 * Return a property for htmldoc using global, request or passed default
+	 * Return a sanitised property for htmldoc using global, request or passed default
 	 */
-	private static function setProperty( $name, $default ) {
+	private static function setProperty( $name, $val, $prefix = 'pdf' ) {
 		global $wgRequest;
-		if( $wgRequest->getText( "pdf$name" ) ) return $wgRequest->getText( "pdf$name" );
-		if( $wgRequest->getText( "amp;pdf$name" ) ) return $wgRequest->getText( "amp;pdf$name" ); // hack to handle ampersand entities in URL
-		if( isset( $GLOBALS["wgPdfBook$name"] ) ) return $GLOBALS["wgPdfBook$name"];
-		return $default;
+		if( $wgRequest->getText( "$prefix$name" ) ) $val = $wgRequest->getText( "$prefix$name" );
+		if( $wgRequest->getText( "amp;$prefix$name" ) ) $val = $wgRequest->getText( "amp;$prefix$name" ); // hack to handle ampersand entities in URL
+		if( isset( $GLOBALS["wgPdfBook$name"] ) ) $val = $GLOBALS["wgPdfBook$name"];
+		return preg_replace( '|[^-_:.a-z0-9]|i', '', $val );
 	}
-
 
 	/**
 	 * Add PDF to actions tabs in MonoBook based skins
@@ -192,7 +190,6 @@ class PdfBookHooks {
 		return true;
 	}
 
-
 	/**
 	 * Add PDF to actions tabs in vector based skins
 	 */
@@ -207,7 +204,7 @@ class PdfBookHooks {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Get the URL for the action link
 	 */
