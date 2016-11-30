@@ -18,10 +18,6 @@ class PdfBookHooks {
 		global $wgServer, $wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory, $wgScript;
 
 		if( $action == 'pdfbook' ) {
-
-			// Create a cache filename from the query-string parameters
-			$cache = $wgUploadDirectory . '/pdf-book-cache' . md5( json_encode( $_GET ) );
-
 			$title = $article->getTitle();
 			$book = $title->getText();
 			$opt = ParserOptions::newFromUser( $wgUser );
@@ -53,33 +49,44 @@ class PdfBookHooks {
 			$width    = $width ? "--browserwidth $width" : '';
 			if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
  
-			// If the file doesn't exist, render the content now
-			if( !file_exists( $cache ) ) {
+			// Generate a list of the articles involved in this doc
+			// - this is unconditional so that it can be used in cache key generation
 
-				// Select articles from members if a category or links in content if not
-				if( $format == 'single' || $format == 'html' ) $articles = array( $title );
-				else {
-					$articles = array();
-					if( $title->getNamespace() == NS_CATEGORY ) {
-						$db     = wfGetDB( DB_SLAVE );
-						$cat    = $db->addQuotes( $title->getDBkey() );
-						$result = $db->select(
-							'categorylinks',
-							'cl_from',
-							"cl_to = $cat",
-							'PdfBook',
-							array( 'ORDER BY' => 'cl_sortkey' )
-						);
-						if( $result instanceof ResultWrapper ) $result = $result->result;
-						while ( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
-					}
-					else {
-						$text = $article->getPage()->getContent()->getNativeData();
-						$text = $wgParser->preprocess( $text, $title, $opt );
-						if( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) )
-							foreach( $links[1] as $link ) $articles[] = Title::newFromText( $link );
+			// Select articles from members if a category or links in content if not
+			if( $format == 'single' || $format == 'html' ) $articles = array( $title );
+			else {
+				$articles = array();
+				if( $title->getNamespace() == NS_CATEGORY ) {
+					$db     = wfGetDB( DB_SLAVE );
+					$cat    = $db->addQuotes( $title->getDBkey() );
+					$result = $db->select(
+						'categorylinks',
+						'cl_from',
+						"cl_to = $cat",
+						'PdfBook',
+						array( 'ORDER BY' => 'cl_sortkey' )
+					);
+					if( $result instanceof ResultWrapper ) $result = $result->result;
+					while( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
+				} else {
+					$text = $article->getPage()->getContent()->getNativeData();
+					$text = $wgParser->preprocess( $text, $title, $opt );
+					if( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) ) {
+						foreach( $links[1] as $link ) $articles[] = Title::newFromText( $link );
 					}
 				}
+			}
+
+ 			// Create a cache filename from the query-string parameters and the revision ID's of all the source articles
+ 			$cache = json_encode( $_GET );
+ 			foreach( $articles as $title ) {
+				$article = new Article( $title );
+				$cache .= '-' . $article->getPage()->getRevision()->getID();
+			}
+			$cache = $wgUploadDirectory . '/pdf-book-cache-' . md5( $cache );
+
+			// If the file doesn't exist, render the content now
+			if( !file_exists( $cache ) ) {
 
 				// Format the article(s) as a single HTML document with absolute URL's
 				$html = '';
