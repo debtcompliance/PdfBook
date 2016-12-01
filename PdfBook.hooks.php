@@ -79,10 +79,7 @@ class PdfBookHooks {
 
  			// Create a cache filename from the query-string parameters and the revision ID's of all the source articles
  			$cache = json_encode( $_GET );
- 			foreach( $articles as $title ) {
-				$article = new Article( $title );
-				$cache .= '-' . $article->getPage()->getRevision()->getID();
-			}
+ 			foreach( $articles as $title ) $cache .= '-' . $title->getLatestRevID();
 			$cache = $wgUploadDirectory . '/pdf-book-cache-' . md5( $cache );
 
 			// If the file doesn't exist, render the content now
