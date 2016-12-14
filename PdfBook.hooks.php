@@ -141,8 +141,8 @@ class PdfBookHooks {
 						. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
 						. "$toc --no-title --numbered --charset $charset $options $layout $width";
 					$cmd = $format == 'htmltoc'
-						? "htmldoc -t html --format html $cmd $file"
-						: "htmldoc -t pdf --format pdf14 $cmd $file";
+						? "htmldoc -t html --format html $cmd \"$file\" "
+						: "htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
 
 					// Execute the command outputting to the cache file
 					putenv( "HTMLDOC_NOCGI=1" );
