@@ -110,9 +110,10 @@ class PdfBookHooks {
 							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
 							$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
 						}
-						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); // Convert image links from thumbnail to full-size
+						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
 						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
 						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
+						$text = preg_replace( "|(<span class=\"mw-headline\" id=\"(.+?)\">(.+?)</span>|", "<a name=\"$1\">$2</a>", $text ); // Make the doc heading spans in to A tags
 						$ttext = basename( $ttext );
 						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
