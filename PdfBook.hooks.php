@@ -113,7 +113,6 @@ class PdfBookHooks {
 						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); // Convert image links from thumbnail to full-size
 						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
 						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
-						$text = preg_replace( "|(<a[^>]+?href=\")(?=\#)|", "$1$turl", $text );              // make hash urls absolute
 						$ttext = basename( $ttext );
 						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
