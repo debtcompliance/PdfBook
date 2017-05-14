@@ -104,8 +104,8 @@ class PdfBookHooks {
 						$out     = $wgParser->parse( $text, $title, $opt, true, true );
 						$text    = $out->getText();
 						if( $format == 'html' ) {
-							$text    = preg_replace( "|(<a[^>]+?href=\")(\#.+?>)|", "$1$turl$2", $text );          // make hash urls absolute
-							$text    = preg_replace( "|(<img[^>]+?src=\")(/.+?>)|", "$1$wgServer$2", $text );      // make image urls absolute
+							$text = preg_replace( "|(<a[^>]+?href=\")(?=\#)|", "$1$turl", $text );          // make hash urls absolute
+							$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text );      // make image urls absolute
 						} else {
 							$pUrl    = parse_url( $wgScriptPath ) ;
 							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
