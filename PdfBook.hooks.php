@@ -88,34 +88,34 @@ class PdfBookHooks {
 				// Format the article(s) as a single HTML document with absolute URL's
 				$html = '';
 				$wgArticlePath = $wgServer . $wgArticlePath;
-				$wgPdfBookTab  = false;
-				$wgScriptPath  = $wgServer . $wgScriptPath;
-				$wgUploadPath  = $wgServer . $wgUploadPath;
-				$wgScript      = $wgServer . $wgScript;
+				$wgPdfBookTab = false;
+				$wgScriptPath = $wgServer . $wgScriptPath;
+				$wgUploadPath = $wgServer . $wgUploadPath;
+				$wgScript = $wgServer . $wgScript;
 				foreach( $articles as $title ) {
 					$ttext = $title->getPrefixedText();
-					$turl  = $title->getFullUrl();
+					$turl = $title->getFullUrl();
 					if( !in_array( $ttext, $exclude ) ) {
 						$article = new Article( $title );
-						$text    = $article->getPage()->getContent()->getNativeData();
-						$text    = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );            // preserve HTML comments
+						$text = $article->getPage()->getContent()->getNativeData();
+						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
 						if( $format != 'single' ) $text .= "__NOTOC__";
-						$opt->setEditSection( false );                                                             // remove section-edit links
-						$out     = $wgParser->parse( $text, $title, $opt, true, true );
-						$text    = $out->getText();
+						$opt->setEditSection( false );                                                      // remove section-edit links
+						$out = $wgParser->parse( $text, $title, $opt, true, true );
+						$text = $out->getText();
 						if( $format == 'html' ) {
-							$text = preg_replace( "|(<a[^>]+?href=\")(?=\#)|", "$1$turl", $text );          // make hash urls absolute
 							$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text );      // make image urls absolute
 						} else {
-							$pUrl    = parse_url( $wgScriptPath ) ;
+							$pUrl = parse_url( $wgScriptPath ) ;
 							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
-							$text    = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
+							$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
 						}
-						if( $nothumbs == 'true') $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); // Convert image links from thumbnail to full-size
-						$text    = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text );     // non-printable areas
-						$text    = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                      // HTML comments hack
-						$ttext   = basename( $ttext );
-						$h1      = $notitle ? "" : "<center><h1>$ttext</h1></center>";
+						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text ); // Convert image links from thumbnail to full-size
+						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
+						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
+						$text = preg_replace( "|(<a[^>]+?href=\")(?=\#)|", "$1$turl", $text );              // make hash urls absolute
+						$ttext = basename( $ttext );
+						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
 						// Add comments if selected and AjaxComments is installed
 						if( $comments ) {
