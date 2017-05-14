@@ -48,7 +48,7 @@ class PdfBookHooks {
 			$options  = self::setProperty( 'Options',     '' );
 			$width    = $width ? "--browserwidth $width" : '';
 			if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
- 
+
 			// Generate a list of the articles involved in this doc
 			// - this is unconditional so that it can be used in cache key generation
 
@@ -94,6 +94,7 @@ class PdfBookHooks {
 				$wgScript      = $wgServer . $wgScript;
 				foreach( $articles as $title ) {
 					$ttext = $title->getPrefixedText();
+					$turl  = $title->getFullUrl();
 					if( !in_array( $ttext, $exclude ) ) {
 						$article = new Article( $title );
 						$text    = $article->getPage()->getContent()->getNativeData();
@@ -103,6 +104,7 @@ class PdfBookHooks {
 						$out     = $wgParser->parse( $text, $title, $opt, true, true );
 						$text    = $out->getText();
 						if( $format == 'html' ) {
+							$text    = preg_replace( "|(<a[^>]+?href=\")(\#.+?>)|", "$1$turl$2", $text );          // make hash urls absolute
 							$text    = preg_replace( "|(<img[^>]+?src=\")(/.+?>)|", "$1$wgServer$2", $text );      // make image urls absolute
 						} else {
 							$pUrl    = parse_url( $wgScriptPath ) ;
