@@ -100,7 +100,7 @@ class PdfBookHooks {
 						$article = new Article( $title );
 						$text = $article->getPage()->getContent()->getNativeData();
 						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
-						if( $format != 'single' ) $text .= "__NOTOC__";
+						//if( $format != 'single' ) $text .= "__NOTOC__";
 						$opt->setEditSection( false );                                                      // remove section-edit links
 						$out = $wgParser->parse( $text, $title, $opt, true, true );
 						$text = $out->getText();
@@ -114,7 +114,12 @@ class PdfBookHooks {
 						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
 						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
 						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
-						$text = preg_replace( "|<span class=\"mw-headline\" id=\"(.+?)\">(.+?)</span>|", "<a name=\"$1\">$2</a>", $text ); // Make the doc heading spans in to A tags
+						$text = preg_replace_callback(
+							"|<span[^>]+class=\"mw-headline\"[^>]*>(.+?)</span>|",
+							function( $m ) {
+								return preg_match( '|id="(.+?)"|', $m[0], $n ) ? "<a name=\"$n[1]\">$m[1]</a>" : $m[0];
+							},
+							$text ); // Make the doc heading spans in to A tags
 						$ttext = basename( $ttext );
 						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
