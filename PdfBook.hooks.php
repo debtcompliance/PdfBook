@@ -100,7 +100,7 @@ class PdfBookHooks {
 						$article = new Article( $title );
 						$text = $article->getPage()->getContent()->getNativeData();
 						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
-						//if( $format != 'single' ) $text .= "__NOTOC__";
+						if( $format != 'single' ) $text .= "__NOTOC__";
 						$opt->setEditSection( false );                                                      // remove section-edit links
 						$out = $wgParser->parse( $text, $title, $opt, true, true );
 						$text = $out->getText();
