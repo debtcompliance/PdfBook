@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"George Animal"
+			"George Animal",
+			"QazîKurd"
 		]
 	},
-	"pdfbook-action": "Weka PDF çap bike"
+	"pdfbook-action": "Wekî PDF çap bike",
+	"pdfbook-log": "$1 wekî pirtûkeke PDF hate derxistin"
 }
