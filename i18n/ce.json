@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sasan700"
+			"Sasan700",
+			"Умар"
 		]
 	},
 	"pdfbook-action": "Зорба оц PDF",
-	"pdfbook-log": "$1 арадаькхина PDF-жайна санна",
+	"pdfbook-log": "$1 экспортйина PDF-жайна санна",
 	"pdfbook-desc": "Кадегари агlонех кхуллу жайна, PDF бараме дерзош"
 }
