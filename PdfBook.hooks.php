@@ -31,7 +31,6 @@ class PdfBookHooks {
 			$format   = self::setProperty( 'format', '', '' );
 			$nothumbs = self::setProperty( 'nothumbs', '', '' );
 			$notitle  = self::setProperty( 'notitle', '', '' );
-			$tLevel   = self::setProperty( 'tlevel', 1, '' );
 			$comments = $wgAjaxComments ? self::setProperty( 'comments', '', false ) : '';
 			$layout   = $format == 'single' ? '--webpage' : '--firstpage toc';
 			$charset  = self::setProperty( 'Charset',     'iso-8859-1' );
@@ -123,7 +122,7 @@ class PdfBookHooks {
 							},
 							$text ); // Make the doc heading spans in to A tags
 						$ttext = basename( $ttext );
-						$h1 = $notitle ? "" : "<center><h$tLevel>$ttext</h$tLevel></center>";
+						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
 						// Add comments if selected and AjaxComments is installed
 						if( $comments ) {
