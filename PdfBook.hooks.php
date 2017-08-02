@@ -45,6 +45,7 @@ class PdfBookHooks {
 			$levels   = self::setProperty( 'TocLevels',   '2' );
 			$exclude  = self::setProperty( 'Exclude',     array() );
 			$width    = self::setProperty( 'Width',       '' );
+			$numbering = self::setProperty( 'Numbering', 'yes' );
 			$options  = self::setProperty( 'Options',     '' );
 			$width    = $width ? "--browserwidth $width" : '';
 			if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
@@ -142,12 +143,13 @@ class PdfBookHooks {
 					file_put_contents( $file, $html );
 
 					// Build the htmldoc command
+					$numbering = $numbering == 'yes' ? '--numbered' : '';
 					$footer = $format == 'single' ? "..." : ".1.";
 					$toc = $format == 'single' ? "" : " --toclevels $levels";
 					$cmd  = "--left $left --right $right --top $top --bottom $bottom"
 						. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
 						. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
-						. "$toc --no-title --numbered --charset $charset $options $layout $width";
+						. "$toc --no-title $numbered --charset $charset $options $layout $width";
 					$cmd = $format == 'htmltoc'
 						? "htmldoc -t html --format html $cmd \"$file\" "
 						: "htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
