@@ -149,7 +149,7 @@ class PdfBookHooks {
 					$cmd  = "--left $left --right $right --top $top --bottom $bottom"
 						. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
 						. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
-						. "$toc --no-title $numbered --charset $charset $options $layout $width";
+						. "$toc --no-title $numbering --charset $charset $options $layout $width";
 					$cmd = $format == 'htmltoc'
 						? "htmldoc -t html --format html $cmd \"$file\" "
 						: "htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
