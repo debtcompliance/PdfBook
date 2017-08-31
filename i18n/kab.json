@@ -5,5 +5,6 @@
 		]
 	},
 	"pdfbook-action": "Siggez s umasal PDF",
-	"pdfbook-log": "$1 yettwasifeḍ s umasal n yidlis PDF"
+	"pdfbook-log": "$1 yettwasifeḍ s umasal n yidlis PDF",
+	"pdfbook-desc": "Ad isuddes adlis seg isebtar n taggayt sakin ad isifeḍ adlis s umasal PDF"
 }
