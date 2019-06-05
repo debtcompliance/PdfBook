@@ -1,6 +1,6 @@
 {
 	"name": "PdfBook",
-	"version": "1.5.4, 2018-21-02",
+	"version": "2.0.0, 2019-06-05",
 	"author": ["[http://www.organicdesign.co.nz/aran Aran Dunkley]"],
 	"url": "http://www.mediawiki.org/wiki/Extension:PdfBook",
 	"description": "pdfbook-desc",
@@ -12,12 +12,12 @@
 		"wgPdfBookDownload": true,       "@": "Whether the files should be downloaded or view in-browser"
 	},
 	"Hooks": {
-		"UnknownAction": ["PdfBookHooks::onUnknownAction"],
 		"SkinTemplateTabs": ["PdfBookHooks::onSkinTemplateTabs"],
 		"SkinTemplateNavigation": ["PdfBookHooks::onSkinTemplateNavigation"]
 	},
 	"AutoloadClasses": {
-		"PdfBookHooks": "PdfBook.hooks.php"
+		"PdfBookHooks": "PdfBookHooks.php",
+		"PdfBookAction": "PdfBookAction.php"
 	},
 	"MessagesDirs": {
 		"PdfBook": ["i18n"]
