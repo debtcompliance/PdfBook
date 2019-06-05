@@ -14,6 +14,7 @@ class PdfBookAction extends Action {
 		$user = $this->getUser();
 		$output = $this->getOutput();
 		$title = $this->getTitle();
+		$page = WikiPage::factory( $title );
 		$book = $title->getText();
 		$opt = ParserOptions::newFromUser( $user );
 		$parser = $wgParser->getFreshParser();
@@ -66,7 +67,7 @@ class PdfBookAction extends Action {
 				if( $result instanceof ResultWrapper ) $result = $result->result;
 				while( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
 			} else {
-				$text = $this->page->getContent()->getNativeData();
+				$text = $page->getContent()->getNativeData();
 				$text = $parser->preprocess( $text, $title, $opt );
 				if( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) ) {
 					foreach( $links[1] as $link ) $articles[] = Title::newFromText( $link );
@@ -94,7 +95,7 @@ class PdfBookAction extends Action {
 				$ttext = $title->getPrefixedText();
 				$turl = $title->getFullUrl();
 				if( !in_array( $ttext, $exclude ) ) {
-					$text = WikiPage::factory( $title )->getContent()->getNativeData();
+					$text = $page->getContent()->getNativeData();
 					$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
 					if( $format != 'single' ) $text .= "__NOTOC__";
 					$opt->setEditSection( false );                                                      // remove section-edit links
