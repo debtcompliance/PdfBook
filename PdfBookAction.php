@@ -37,7 +37,7 @@ class PdfBookAction extends Action {
 		$bottom    = $this->setProperty( 'BottomMargin','1cm' );
 		$font      = $this->setProperty( 'Font',        'Arial' );
 		$size      = $this->setProperty( 'FontSize',    '8' );
-		$ls        = $this->setProperty( 'FontSpacing', 1 );
+		$ls        = $this->setProperty( 'FontSpacing', 1.5 );
 		$linkcol   = $this->setProperty( 'LinkColour',  '217A28' );
 		$levels    = $this->setProperty( 'TocLevels',   '2' );
 		$exclude   = $this->setProperty( 'Exclude',     array() );
