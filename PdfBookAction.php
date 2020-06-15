@@ -43,7 +43,7 @@ class PdfBookAction extends Action {
 		$exclude   = $this->setProperty( 'Exclude',     array() );
 		$width     = $this->setProperty( 'Width',       '' );
 		$numbering = $this->setProperty( 'Numbering', 'yes' );
-		$options   = $this->setProperty( 'Options',     '' );
+		$cmdopt    = $this->setProperty( 'Options',     '' );
 		$width     = $width ? "--browserwidth $width" : '';
 		if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
 
@@ -97,10 +97,14 @@ class PdfBookAction extends Action {
 				if( !in_array( $ttext, $exclude ) ) {
 					$text = $page->getContent()->getNativeData();
 					$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
-					if( $format != 'single' ) $text .= "__NOTOC__";
-					$opt->setEditSection( false );                                                      // remove section-edit links
+					$allowToc = $format != 'single' ? false : true;
 					$out = $parser->parse( $text, $title, $opt, true, true );
-					$text = $out->getText();
+					$text = $out->getText(
+						$options = [
+							'allowTOC' => $allowToc, // generate TOC if enough headings and format not 'single'
+							'enableSectionEditLinks' => true,  // remove section-edit links
+						]
+					);
 					if( $format == 'html' ) {
 						$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text );      // make image urls absolute
 					} else {
@@ -145,7 +149,7 @@ class PdfBookAction extends Action {
 				$cmd  = "--left $left --right $right --top $top --bottom $bottom"
 					. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
 					. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
-					. "$toc --no-title $numbering --charset $charset $options $layout $width";
+					. "$toc --no-title $numbering --charset $charset $cmdopt $layout $width";
 				$cmd = $format == 'htmltoc'
 					? "htmldoc -t html --format html $cmd \"$file\" "
 					: "htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
