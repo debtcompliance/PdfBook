@@ -96,14 +96,14 @@ class PdfBookAction extends Action {
 				$turl = $title->getFullUrl();
 				if( !in_array( $ttext, $exclude ) ) {
 					$text = $page->getContent()->getNativeData();
-					$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text );        // preserve HTML comments
+					$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
 					$out = $parser->parse( $text, $title, $opt, true, true );
 					$text = $out->getText([
 							'allowTOC' => $format == 'single', // generate TOC if enough headings and format not 'single'
-							'enableSectionEditLinks' => true,  // remove section-edit links
+							'enableSectionEditLinks' => false,  // remove section-edit links
 					]);
 					if( $format == 'html' ) {
-						$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text );      // make image urls absolute
+						$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text ); // make image urls absolute
 					} else {
 						$pUrl = parse_url( $wgScriptPath ) ;
 						$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
