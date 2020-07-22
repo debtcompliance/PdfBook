@@ -55,7 +55,7 @@ class PdfBookAction extends Action {
 		else {
 			$articles = array();
 			if( $title->getNamespace() == NS_CATEGORY ) {
-				$db     = wfGetDB( DB_SLAVE );
+				$db     = wfGetDB( DB_REPLICA );
 				$cat    = $db->addQuotes( $title->getDBkey() );
 				$result = $db->select(
 					'categorylinks',
@@ -64,7 +64,7 @@ class PdfBookAction extends Action {
 					'PdfBook',
 					array( 'ORDER BY' => 'cl_sortkey' )
 				);
-				if( $result instanceof ResultWrapper ) $result = $result->result;
+				if( $result instanceof IResultWrapper ) $result = $result->result;
 				while( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
 			} else {
 				$text = $page->getContent()->getNativeData();
@@ -105,8 +105,8 @@ class PdfBookAction extends Action {
 					if( $format == 'html' ) {
 						$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text ); // make image urls absolute
 					} else {
-						$pUrl = parse_url( $wgScriptPath ) ;
-						$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ) ; // the image's path
+						$pUrl = parse_url( $wgScriptPath );
+						$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ); // the image's path
 						$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
 					}
 					if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
