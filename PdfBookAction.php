@@ -92,6 +92,7 @@ class PdfBookAction extends Action {
 			$wgUploadPath = $wgServer . $wgUploadPath;
 			$wgScript = $wgServer . $wgScript;
 			foreach( $articles as $title ) {
+				$page = WikiPage::factory( $title );
 				$ttext = $title->getPrefixedText();
 				$turl = $title->getFullUrl();
 				if( !in_array( $ttext, $exclude ) ) {
