@@ -9,8 +9,8 @@ class PdfBookAction extends Action {
 	 * Perform the export operation
 	 */
 	public function show() {
-		global $wgAjaxComments, $wgPdfBookDownload, $wgParser,
-			$wgServer, $wgScript, $wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory;
+		global $wgPdfBookDownload, $wgParser, $wgServer, $wgScript,
+			$wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory;
 		$user = $this->getUser();
 		$output = $this->getOutput();
 		$title = $this->getTitle();
@@ -28,7 +28,6 @@ class PdfBookAction extends Action {
 		$format    = $this->setProperty( 'format', '', '' );
 		$nothumbs  = $this->setProperty( 'nothumbs', '', '' );
 		$notitle   = $this->setProperty( 'notitle', '', '' );
-		$comments  = $wgAjaxComments ? $this->setProperty( 'comments', '', false ) : '';
 		$layout    = $format == 'single' ? '--webpage' : '--firstpage toc';
 		$charset   = $this->setProperty( 'Charset',     'iso-8859-1' );
 		$left      = $this->setProperty( 'LeftMargin',  '1cm' );
@@ -45,6 +44,10 @@ class PdfBookAction extends Action {
 		$numbering = $this->setProperty( 'Numbering', 'yes' );
 		$options   = $this->setProperty( 'Options',     '' );
 		$width     = $width ? "--browserwidth $width" : '';
+		$comments  = ExtensionRegistry::getInstance()->isLoaded( 'AjaxComments' )
+			? $this->setProperty( 'comments', '', false )
+			: '';
+
 		if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
 
 		// Generate a list of the articles involved in this doc
@@ -124,10 +127,12 @@ class PdfBookAction extends Action {
 
 					// Add comments if selected and AjaxComments is installed
 					if( $comments ) {
-						$comments = $wgAjaxComments->onUnknownAction( 'ajaxcommentsinternal', $article );
+						$commentResponse = AjaxComments::singleton()->getComments( $title->getArticleID() );
+						foreach( $commentResponse as $comment ) {
+							$commentsForPDF .= $comment['html'];
+						}
 					}
-
-					$html .= utf8_decode( "$h1$text\n$comments" );
+					$html .= utf8_decode( "$h1$text\n$commentsForPDF" );
 				}
 			}
 
