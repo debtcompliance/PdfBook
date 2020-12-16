@@ -126,6 +126,7 @@ class PdfBookAction extends Action {
 					$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
 					// Add comments if selected and AjaxComments is installed
+					$commentsForPDF = '';
 					if( $comments ) {
 						$commentResponse = AjaxComments::singleton()->getComments( $title->getArticleID() );
 						foreach( $commentResponse as $comment ) {
