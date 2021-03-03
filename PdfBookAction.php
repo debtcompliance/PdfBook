@@ -48,7 +48,9 @@ class PdfBookAction extends Action {
 			? $this->setProperty( 'comments', '', false )
 			: '';
 
-		if( !is_array( $exclude ) ) $exclude = preg_split( '\\s*,\\s*', $exclude );
+		if ( !is_array( $exclude ) ) {
+			$exclude = preg_split( '/\\s*,\\s*/', $exclude );
+		}
 
 		// Generate a list of the articles involved in this doc
 		// - this is unconditional so that it can be used in cache key generation
@@ -95,44 +97,46 @@ class PdfBookAction extends Action {
 			$wgUploadPath = $wgServer . $wgUploadPath;
 			$wgScript = $wgServer . $wgScript;
 			foreach( $articles as $title ) {
-				$page = WikiPage::factory( $title );
-				$ttext = $title->getPrefixedText();
-				$turl = $title->getFullUrl();
-				if( !in_array( $ttext, $exclude ) ) {
-					$text = $page->getContent()->getNativeData();
-					$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
-					$out = $parser->parse( $text, $title, $opt, true, true );
-					$text = $out->getText([
-							'allowTOC' => $format == 'single', // generate TOC if enough headings and format not 'single'
-							'enableSectionEditLinks' => false,  // remove section-edit links
-					]);
-					if( $format == 'html' ) {
-						$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text ); // make image urls absolute
-					} else {
-						$pUrl = parse_url( $wgScriptPath );
-						$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ); // the image's path
-						$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
-					}
-					if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
-					$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
-					$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
-					$text = preg_replace_callback(
-						"|<span[^>]+class=\"mw-headline\"[^>]*>(.+?)</span>|",
-						function( $m ) {
-							return preg_match( '|id="(.+?)"|', $m[0], $n ) ? "<a name=\"$n[1]\">$m[1]</a>" : $m[0];
-						},
-						$text ); // Make the doc heading spans in to A tags
-					$ttext = basename( $ttext );
-					$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
-
-					// Add comments if selected and AjaxComments is installed
-					if( $comments ) {
-						$commentResponse = AjaxComments::singleton()->getComments( $title->getArticleID() );
-						foreach( $commentResponse as $comment ) {
-							$commentsForPDF .= $comment['html'];
+				if ( is_object( $title ) && $title->exists() ) {
+					$page = WikiPage::factory( $title );
+					$ttext = $title->getPrefixedText();
+					$turl = $title->getFullUrl();
+					if( !in_array( $ttext, $exclude ) ) {
+						$text = $page->getContent()->getNativeData();
+						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
+						$out = $parser->parse( $text, $title, $opt, true, true );
+						$text = $out->getText([
+								'allowTOC' => $format == 'single', // generate TOC if enough headings and format not 'single'
+								'enableSectionEditLinks' => false,  // remove section-edit links
+						]);
+						if( $format == 'html' ) {
+							$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text ); // make image urls absolute
+						} else {
+							$pUrl = parse_url( $wgScriptPath );
+							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ); // the image's path
+							$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
 						}
+						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
+						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
+						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
+						$text = preg_replace_callback(
+							"|<span[^>]+class=\"mw-headline\"[^>]*>(.+?)</span>|",
+							function( $m ) {
+								return preg_match( '|id="(.+?)"|', $m[0], $n ) ? "<a name=\"$n[1]\">$m[1]</a>" : $m[0];
+							},
+							$text ); // Make the doc heading spans in to A tags
+						$ttext = basename( $ttext );
+						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
+
+						// Add comments if selected and AjaxComments is installed
+						if( $comments ) {
+							$commentResponse = AjaxComments::singleton()->getComments( $title->getArticleID() );
+							foreach( $commentResponse as $comment ) {
+								$commentsForPDF .= $comment['html'];
+							}
+						}
+						$html .= utf8_decode( "$h1$text\n$commentsForPDF" );
 					}
-					$html .= utf8_decode( "$h1$text\n$commentsForPDF" );
 				}
 			}
 

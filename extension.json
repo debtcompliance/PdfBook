@@ -1,7 +1,10 @@
 {
 	"name": "PdfBook",
-	"version": "2.0.2, 2020-08-25",
-	"author": ["[http://www.organicdesign.co.nz/aran Aran Dunkley]"],
+	"version": "2.0.3, 2021-03-03",
+	"author": [
+		"[http://www.organicdesign.co.nz/aran Aran Dunkley]"
+		"[http://absorto.dev Igor Absorto]"
+	],
 	"url": "http://www.mediawiki.org/wiki/Extension:PdfBook",
 	"description": "pdfbook-desc",
 	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
@@ -21,5 +24,6 @@
 	},
 	"MessagesDirs": {
 		"PdfBook": ["i18n"]
-	}
+	},
+	"manifest_version": 1
 }
