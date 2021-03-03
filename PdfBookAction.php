@@ -22,7 +22,7 @@ class PdfBookAction extends Action {
 		// Log the export
 		$msg = wfMessage( 'pdfbook-log', $user->getUserPage()->getPrefixedText() )->text();
 		$log = new LogPage( 'pdf', false );
-		$log->addEntry( 'book', $title, $msg );
+		$log->addEntry( 'book', $title, $msg, [], $user);
 
 		// Initialise PDF variables
 		$format    = $this->setProperty( 'format', '', '' );
@@ -114,7 +114,7 @@ class PdfBookAction extends Action {
 						} else {
 							$pUrl = parse_url( $wgScriptPath );
 							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ); // the image's path
-							$text = preg_replace( "|(<img[^>]+?src=\"$imgpath)(/.+?>)|", "<img src=\"$wgUploadDirectory$2", $text );
+							$text = preg_replace( '| src="' . $imgpath. '([^"]*)|', ' src="' .$wgUploadDirectory . '$1', $text );
 						}
 						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
 						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
