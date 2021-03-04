@@ -9,20 +9,21 @@ class PdfBookAction extends Action {
 	 * Perform the export operation
 	 */
 	public function show() {
-		global $wgPdfBookDownload, $wgParser, $wgServer, $wgScript,
+		global $wgPdfBookTab, $wgPdfBookDownload, $wgParser, $wgServer, $wgScript,
 			$wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory;
-		$user = $this->getUser();
+
+		$user   = $this->getUser();
 		$output = $this->getOutput();
-		$title = $this->getTitle();
-		$page = WikiPage::factory( $title );
-		$book = $title->getText();
-		$opt = ParserOptions::newFromUser( $user );
+		$title  = $this->getTitle();
+		$page   = WikiPage::factory( $title );
+		$book   = $title->getText();
+		$opt    = ParserOptions::newFromUser( $user );
 		$parser = $wgParser->getFreshParser();
 
 		// Log the export
 		$msg = wfMessage( 'pdfbook-log', $user->getUserPage()->getPrefixedText() )->text();
 		$log = new LogPage( 'pdf', false );
-		$log->addEntry( 'book', $title, $msg, [], $user);
+		$log->addEntry( 'book', $title, $msg, [], $user );
 
 		// Initialise PDF variables
 		$format    = $this->setProperty( 'format', '', '' );
@@ -33,13 +34,13 @@ class PdfBookAction extends Action {
 		$left      = $this->setProperty( 'LeftMargin',  '1cm' );
 		$right     = $this->setProperty( 'RightMargin', '1cm' );
 		$top       = $this->setProperty( 'TopMargin',   '1cm' );
-		$bottom    = $this->setProperty( 'BottomMargin','1cm' );
+		$bottom    = $this->setProperty( 'BottomMargin', '1cm' );
 		$font      = $this->setProperty( 'Font',        'Arial' );
 		$size      = $this->setProperty( 'FontSize',    '8' );
 		$ls        = $this->setProperty( 'FontSpacing', 1.5 );
 		$linkcol   = $this->setProperty( 'LinkColour',  '217A28' );
 		$levels    = $this->setProperty( 'TocLevels',   '2' );
-		$exclude   = $this->setProperty( 'Exclude',     array() );
+		$exclude   = $this->setProperty( 'Exclude',     [] );
 		$width     = $this->setProperty( 'Width',       '' );
 		$numbering = $this->setProperty( 'Numbering', 'yes' );
 		$options   = $this->setProperty( 'Options',     '' );
@@ -56,10 +57,11 @@ class PdfBookAction extends Action {
 		// - this is unconditional so that it can be used in cache key generation
 
 		// Select articles from members if a category or links in content if not
-		if( $format == 'single' || $format == 'html' ) $articles = array( $title );
-		else {
-			$articles = array();
-			if( $title->getNamespace() == NS_CATEGORY ) {
+		if ( $format == 'single' || $format == 'html' ) {
+			$articles = [ $title ];
+		} else {
+			$articles = [];
+			if ( $title->getNamespace() == NS_CATEGORY ) {
 				$db     = wfGetDB( DB_REPLICA );
 				$cat    = $db->addQuotes( $title->getDBkey() );
 				$result = $db->select(
@@ -67,27 +69,42 @@ class PdfBookAction extends Action {
 					'cl_from',
 					"cl_to = $cat",
 					'PdfBook',
-					array( 'ORDER BY' => 'cl_sortkey' )
+					[ 'ORDER BY' => 'cl_sortkey' ]
 				);
-				if( $result instanceof IResultWrapper ) $result = $result->result;
-				while( $row = $db->fetchRow( $result ) ) $articles[] = Title::newFromID( $row[0] );
+				if ( $result instanceof IResultWrapper ) {
+					$result = $result->result;
+				}
+				while ( $row = $db->fetchRow( $result ) ) {
+					$articles[] = Title::newFromID( $row[0] );
+				}
 			} else {
 				$text = $page->getContent()->getNativeData();
 				$text = $parser->preprocess( $text, $title, $opt );
-				if( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) ) {
-					foreach( $links[1] as $link ) $articles[] = Title::newFromText( $link );
+				if ( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) ) {
+					foreach ( $links[1] as $link ) {
+						$articles[] = Title::newFromText( $link );
+					}
 				}
 			}
 		}
 
 		// Create a cache filename from the hash of...
-		$cache = json_encode( $_GET ); // the query-string of the request,
-		$cache .= file_get_contents( __FILE__ ); // the contents of the rendering code (this script),
-		foreach( $articles as $title ) $cache .= '-' . $title->getLatestRevID(); // and the latest revision(s) of the article(s)
+
+		// ...the query-string of the request,
+		$cache = json_encode( $_GET ); 
+
+		// ...the contents of the rendering code (this script)
+		$cache .= file_get_contents( __FILE__ );
+
+		// ...and the latest revision(s) of the article(s)
+		foreach ( $articles as $title ) {
+			$cache .= '-' . $title->getLatestRevID();
+		}
+
 		$cache = $wgUploadDirectory . '/pdf-book-cache-' . md5( $cache );
 
 		// If the file doesn't exist, render the content now
-		if( !file_exists( $cache ) ) {
+		if ( !file_exists( $cache ) ) {
 
 			// Format the article(s) as a single HTML document with absolute URL's
 			$html = '';
@@ -96,43 +113,67 @@ class PdfBookAction extends Action {
 			$wgScriptPath = $wgServer . $wgScriptPath;
 			$wgUploadPath = $wgServer . $wgUploadPath;
 			$wgScript = $wgServer . $wgScript;
-			foreach( $articles as $title ) {
+			foreach ( $articles as $title ) {
 				if ( is_object( $title ) && $title->exists() ) {
 					$page = WikiPage::factory( $title );
 					$ttext = $title->getPrefixedText();
 					$turl = $title->getFullUrl();
-					if( !in_array( $ttext, $exclude ) ) {
+					if ( !in_array( $ttext, $exclude ) ) {
 						$text = $page->getContent()->getNativeData();
 						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
 						$out = $parser->parse( $text, $title, $opt, true, true );
-						$text = $out->getText([
-								'allowTOC' => $format == 'single', // generate TOC if enough headings and format not 'single'
-								'enableSectionEditLinks' => false,  // remove section-edit links
-						]);
-						if( $format == 'html' ) {
-							$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text ); // make image urls absolute
+						$text = $out->getText(
+							[
+								// generate TOC if enough headings and format not 'single'
+								'allowTOC' => $format == 'single',
+								// remove section-edit links
+								'enableSectionEditLinks' => false,
+							]
+						);
+
+						// Make image urls absolute
+						if ( $format == 'html' ) {
+							$text = preg_replace( "|(<img[^>]+?src=\")(?=/)|", "$1$wgServer", $text );
 						} else {
 							$pUrl = parse_url( $wgScriptPath );
-							$imgpath = str_replace( '/' , '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) ); // the image's path
-							$text = preg_replace( '| src="' . $imgpath. '([^"]*)|', ' src="' .$wgUploadDirectory . '$1', $text );
+							$imgpath = str_replace( '/', '\/', $pUrl['path'] . '/' . basename( $wgUploadDirectory ) );
+							$text = preg_replace(
+								'| src="' . $imgpath . '([^"]*)|',
+								' src="' . $wgUploadDirectory . '$1',
+								$text
+							);
 						}
-						if( $nothumbs == 'true' ) $text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );   // Convert image links from thumbnail to full-size
-						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text ); // non-printable areas
-						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );                  // HTML comments hack
+
+						// Convert image links from thumbnail to full-size
+						if ( $nothumbs == 'true' ) {
+							$text = preg_replace( "|images/thumb/(\w+/\w+/[\w\.\-]+).*\"|", "images/$1\"", $text );
+						}
+
+						// Remove non-printable areas
+						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text );
+
+						// HTML comments hack
+						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );
+
+						// Make the doc heading spans in to A tags
 						$text = preg_replace_callback(
 							"|<span[^>]+class=\"mw-headline\"[^>]*>(.+?)</span>|",
-							function( $m ) {
-								return preg_match( '|id="(.+?)"|', $m[0], $n ) ? "<a name=\"$n[1]\">$m[1]</a>" : $m[0];
+							function ( $m ) {
+								return preg_match( '|id="(.+?)"|', $m[0], $n )
+									? "<a name=\"$n[1]\">$m[1]</a>"
+									: $m[0];
 							},
-							$text ); // Make the doc heading spans in to A tags
+							$text
+						);
+
 						$ttext = basename( $ttext );
 						$h1 = $notitle ? "" : "<center><h1>$ttext</h1></center>";
 
 						// Add comments if selected and AjaxComments is installed
 						$commentsForPDF = '';
-						if( $comments ) {
+						if ( $comments ) {
 							$commentResponse = AjaxComments::singleton()->getComments( $title->getArticleID() );
-							foreach( $commentResponse as $comment ) {
+							foreach ( $commentResponse as $comment ) {
 								$commentsForPDF .= $comment['html'];
 							}
 						}
@@ -142,11 +183,14 @@ class PdfBookAction extends Action {
 			}
 
 			// Build the cache file
-			if( $format == 'html' ) file_put_contents( $cache, $html );
-			else {
+			if ( $format == 'html' ) {
+				file_put_contents( $cache, $html );
+			} else {
 
 				// Write the HTML to a tmp file
-				if( !is_dir( $wgUploadDirectory ) ) mkdir( $wgUploadDirectory );
+				if ( !is_dir( $wgUploadDirectory ) ) {
+					mkdir( $wgUploadDirectory );
+				}
 				$file = $wgUploadDirectory . '/' . uniqid( 'pdf-book' );
 				file_put_contents( $file, $html );
 
@@ -171,13 +215,16 @@ class PdfBookAction extends Action {
 
 		// Output the cache file
 		$output->disable();
-		if( $format == 'html' || $format == 'htmltoc' ) {
+		if ( $format == 'html' || $format == 'htmltoc' ) {
 			header( "Content-Type: text/html" );
 			header( "Content-Disposition: attachment; filename=\"$book.html\"" );
 		} else {
 			header( "Content-Type: application/pdf" );
-			if( $wgPdfBookDownload ) header( "Content-Disposition: attachment; filename=\"$book.pdf\"" );
-			else header( "Content-Disposition: inline; filename=\"$book.pdf\"" );
+			if ( $wgPdfBookDownload ) {
+				header( "Content-Disposition: attachment; filename=\"$book.pdf\"" );
+			} else {
+				header( "Content-Disposition: inline; filename=\"$book.pdf\"" );
+			}
 		}
 		readfile( $cache );
 	}
@@ -187,9 +234,18 @@ class PdfBookAction extends Action {
 	 */
 	private function setProperty( $name, $val, $prefix = 'pdf' ) {
 		$request = $this->getRequest();
-		if( $request->getText( "$prefix$name" ) ) $val = $request->getText( "$prefix$name" );
-		if( $request->getText( "amp;$prefix$name" ) ) $val = $request->getText( "amp;$prefix$name" ); // hack to handle ampersand entities in URL
-		if( isset( $GLOBALS["wgPdfBook$name"] ) ) $val = $GLOBALS["wgPdfBook$name"];
+		if ( $request->getText( "$prefix$name" ) ) {
+			$val = $request->getText( "$prefix$name" );
+		}
+
+		// hack to handle ampersand entities in URL
+		if ( $request->getText( "amp;$prefix$name" ) ) {
+			$val = $request->getText( "amp;$prefix$name" );
+		}
+
+		if ( isset( $GLOBALS["wgPdfBook$name"] ) ) {
+			$val = $GLOBALS["wgPdfBook$name"];
+		}
 		return preg_replace( '|[^-_:.a-z0-9]|i', '', $val );
 	}
 }

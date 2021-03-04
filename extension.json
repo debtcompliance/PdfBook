@@ -1,6 +1,6 @@
 {
 	"name": "PdfBook",
-	"version": "2.0.3, 2021-03-03",
+	"version": "2.0.4, 2021-03-04",
 	"author": [
 		"[http://www.organicdesign.co.nz/aran Aran Dunkley]",
 		"[http://absorto.dev Igor Absorto]"
@@ -15,7 +15,6 @@
 		"wgPdfBookDownload": true,       "@": "Whether the files should be downloaded or view in-browser"
 	},
 	"Hooks": {
-		"SkinTemplateTabs": ["PdfBookHooks::onSkinTemplateTabs"],
 		"SkinTemplateNavigation": ["PdfBookHooks::onSkinTemplateNavigation"]
 	},
 	"AutoloadClasses": {

@@ -14,31 +14,16 @@ class PdfBookHooks {
 	}
 
 	/**
-	 * Add PDF to actions tabs in MonoBook based skins
-	 */
-	public static function onSkinTemplateTabs( $skin, &$actions) {
-		global $wgPdfBookTab, $wgUser;
-		if( $wgPdfBookTab && $wgUser->isLoggedIn() ) {
-			$actions['pdfbook'] = array(
-				'class' => false,
-				'text' => wfMessage( 'pdfbook-action' )->text(),
-				'href' => self::actionLink( $skin )
-			);
-		}
-		return true;
-	}
-
-	/**
-	 * Add PDF to actions tabs in vector based skins
+	 * Add PDF to actions tabs in skins
 	 */
 	public static function onSkinTemplateNavigation( $skin, &$actions ) {
-		global $wgPdfBookTab, $wgUser;
-		if( $wgPdfBookTab && $wgUser->isLoggedIn() ) {
-			$actions['views']['pdfbook'] = array(
+		global $wgPdfBookTab;
+		if ( $wgPdfBookTab && $skin->getUser()->isLoggedIn() ) {
+			$actions['views']['pdfbook'] = [
 				'class' => false,
 				'text' => wfMessage( 'pdfbook-action' )->text(),
 				'href' => self::actionLink( $skin )
-			);
+			];
 		}
 		return true;
 	}
@@ -48,7 +33,11 @@ class PdfBookHooks {
 	 */
 	public static function actionLink( $skin ) {
 		$qs = 'action=pdfbook&format=single';
-		foreach( $_REQUEST as $k => $v ) if( $k != 'title' ) $qs .= "&$k=$v";
+		foreach ( $_REQUEST as $k => $v ) {
+			if ( $k != 'title' ) {
+				$qs .= "&$k=$v";
+			}
+		}
 		return $skin->getTitle()->getLocalURL( $qs );
 	}
 }
