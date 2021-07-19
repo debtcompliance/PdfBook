@@ -26,6 +26,7 @@ class PdfBookAction extends Action {
 		$log->addEntry( 'book', $title, $msg, [], $user );
 
 		// Initialise PDF variables
+		$htmldoc   = $this->setProperty( 'HtmlDocPath', '/usr/bin/htmldoc' );
 		$format    = $this->setProperty( 'format', '', '' );
 		$nothumbs  = $this->setProperty( 'nothumbs', '', '' );
 		$notitle   = $this->setProperty( 'notitle', '', '' );
@@ -55,7 +56,6 @@ class PdfBookAction extends Action {
 
 		// Generate a list of the articles involved in this doc
 		// - this is unconditional so that it can be used in cache key generation
-
 		// Select articles from members if a category or links in content if not
 		if ( $format == 'single' || $format == 'html' ) {
 			$articles = [ $title ];
@@ -91,7 +91,7 @@ class PdfBookAction extends Action {
 		// Create a cache filename from the hash of...
 
 		// ...the query-string of the request,
-		$cache = json_encode( $_GET ); 
+		$cache = json_encode( $_GET );
 
 		// ...the contents of the rendering code (this script)
 		$cache .= file_get_contents( __FILE__ );
@@ -203,8 +203,8 @@ class PdfBookAction extends Action {
 					. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
 					. "$toc --no-title $numbering --charset $charset $options $layout $width";
 				$cmd = $format == 'htmltoc'
-					? "htmldoc -t html --format html $cmd \"$file\" "
-					: "htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
+					? "$htmldoc -t html --format html $cmd \"$file\" "
+					: "$htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
 
 				// Execute the command outputting to the cache file
 				putenv( "HTMLDOC_NOCGI=1" );
@@ -246,6 +246,6 @@ class PdfBookAction extends Action {
 		if ( isset( $GLOBALS["wgPdfBook$name"] ) ) {
 			$val = $GLOBALS["wgPdfBook$name"];
 		}
-		return preg_replace( '|[^-_:.a-z0-9]|i', '', $val );
+		return preg_replace( '|[^\/-_:.a-z0-9]|i', '', $val );
 	}
 }
