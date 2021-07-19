@@ -91,7 +91,7 @@ class PdfBookAction extends Action {
 		// Create a cache filename from the hash of...
 
 		// ...the query-string of the request,
-		$cache = json_encode( $_GET );
+		$cache = json_encode( $this->getRequest()->getValues() );
 
 		// ...the contents of the rendering code (this script)
 		$cache .= file_get_contents( __FILE__ );
