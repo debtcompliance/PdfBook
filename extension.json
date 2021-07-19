@@ -6,7 +6,7 @@
 		"[http://absorto.dev Igor Absorto]"
 	],
 	"url": "http://www.mediawiki.org/wiki/Extension:PdfBook",
-	"description": "pdfbook-desc",
+	"descriptionmsg": "pdfbook-desc",
 	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
 	"type": "parserhook",
 	"callback": "PdfBookHooks::onRegistration",
