@@ -26,7 +26,7 @@ class PdfBookAction extends Action {
 		$log->addEntry( 'book', $title, $msg, [], $user );
 
 		// Initialise PDF variables
-		$htmldoc   = $this->setProperty( 'HtmlDocPath', '/usr/bin/htmldoc' );
+		$htmldoc   = $this->setPropertyFromGlobals( 'HtmlDocPath', '/usr/bin/htmldoc' );
 		$format    = $this->setProperty( 'format', '', '' );
 		$nothumbs  = $this->setProperty( 'nothumbs', '', '' );
 		$notitle   = $this->setProperty( 'notitle', '', '' );
@@ -44,8 +44,8 @@ class PdfBookAction extends Action {
 		$exclude   = $this->setProperty( 'Exclude',     [] );
 		$width     = $this->setProperty( 'Width',       '' );
 		$numbering = $this->setProperty( 'Numbering', 'yes' );
-		$options   = $this->setProperty( 'Options',     '' );
-		$width     = $width ? "--browserwidth $width" : '';
+		$options   = $this->setPropertyFromGlobals( 'Options',     '' );
+		$width     = $width ? "--browserwidth " . escapeshellarg($width) : '';
 		$comments  = ExtensionRegistry::getInstance()->isLoaded( 'AjaxComments' )
 			? $this->setProperty( 'comments', '', false )
 			: '';
@@ -197,18 +197,18 @@ class PdfBookAction extends Action {
 				// Build the htmldoc command
 				$numbering = $numbering == 'yes' ? '--numbered' : '';
 				$footer = $format == 'single' ? "..." : ".1.";
-				$toc = $format == 'single' ? "" : " --toclevels $levels";
-				$cmd  = "--left $left --right $right --top $top --bottom $bottom"
+				$toc = $format == 'single' ? "" : " --toclevels " . escapeshellarg($levels);
+				$cmd  = "--left " . escapeshellarg($left) . " --right " . escapeshellarg($right) . " --top " . escapeshellarg($top) . " --bottom " . escapeshellarg($bottom)
 					. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
-					. " --bodyfont $font --fontsize $size --fontspacing $ls --linkstyle plain --linkcolor $linkcol"
-					. "$toc --no-title $numbering --charset $charset $options $layout $width";
+					. " --bodyfont " . escapeshellarg($font) . " --fontsize " . escapeshellarg($size) ." --fontspacing " . escapeshellarg($ls) . " --linkstyle plain --linkcolor " . escapeshellarg($linkcol)
+					. "$toc --no-title $numbering --charset " . escapeshellarg($charset) . " $options $layout $width";
 				$cmd = $format == 'htmltoc'
-					? "$htmldoc -t html --format html $cmd \"$file\" "
-					: "$htmldoc -t pdf --format pdf14 $cmd \"$file\" ";
+					? "$htmldoc -t html --format html $cmd " . escapeshellarg($file) . " "
+					: "$htmldoc -t pdf --format pdf14 $cmd " . escapeshellarg($file) . " ";
 
 				// Execute the command outputting to the cache file
 				putenv( "HTMLDOC_NOCGI=1" );
-				shell_exec( "$cmd > \"$cache\"" );
+				shell_exec( "$cmd > " . escapeshellarg($cache) );
 				unlink( $file );
 			}
 		}
@@ -229,9 +229,13 @@ class PdfBookAction extends Action {
 		readfile( $cache );
 	}
 
-	/**
-	 * Return a sanitised property for htmldoc using global, request or passed default
-	 */
+	private function setPropertyFromGlobals( $name, $val ) {
+		if ( isset( $GLOBALS["wgPdfBook$name"] ) ) {
+			$val = $GLOBALS["wgPdfBook$name"];
+		}
+		return preg_replace( '|[^\/-_:.a-z0-9]|i', '', $val );
+	}
+
 	private function setProperty( $name, $val, $prefix = 'pdf' ) {
 		$request = $this->getRequest();
 		if ( $request->getText( "$prefix$name" ) ) {
