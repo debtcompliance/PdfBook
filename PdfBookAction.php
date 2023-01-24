@@ -45,7 +45,7 @@ class PdfBookAction extends Action {
 		$width     = $this->setProperty( 'Width',       '' );
 		$numbering = $this->setProperty( 'Numbering', 'yes' );
 		$options   = $this->setPropertyFromGlobals( 'Options',     '' );
-		$width     = $width ? "--browserwidth " . escapeshellarg($width) : '';
+		$width     = $width ? "--browserwidth " . escapeshellarg( $width ) : '';
 		$comments  = ExtensionRegistry::getInstance()->isLoaded( 'AjaxComments' )
 			? $this->setProperty( 'comments', '', false )
 			: '';
@@ -197,18 +197,21 @@ class PdfBookAction extends Action {
 				// Build the htmldoc command
 				$numbering = $numbering == 'yes' ? '--numbered' : '';
 				$footer = $format == 'single' ? "..." : ".1.";
-				$toc = $format == 'single' ? "" : " --toclevels " . escapeshellarg($levels);
-				$cmd  = "--left " . escapeshellarg($left) . " --right " . escapeshellarg($right) . " --top " . escapeshellarg($top) . " --bottom " . escapeshellarg($bottom)
+				$toc = $format == 'single' ? "" : " --toclevels " . escapeshellarg( $levels );
+				$cmd  = "--left " . escapeshellarg( $left ) . " --right " . escapeshellarg( $right )
+					. " --top " . escapeshellarg( $top ) . " --bottom " . escapeshellarg( $bottom )
 					. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
-					. " --bodyfont " . escapeshellarg($font) . " --fontsize " . escapeshellarg($size) ." --fontspacing " . escapeshellarg($ls) . " --linkstyle plain --linkcolor " . escapeshellarg($linkcol)
-					. "$toc --no-title $numbering --charset " . escapeshellarg($charset) . " $options $layout $width";
+					. " --bodyfont " . escapeshellarg( $font ) . " --fontsize " . escapeshellarg( $size )
+					." --fontspacing " . escapeshellarg( $ls ) . " --linkstyle plain --linkcolor " 
+					. escapeshellarg( $linkcol ) . "$toc --no-title $numbering --charset " 
+					. escapeshellarg( $charset ) . " $options $layout $width";
 				$cmd = $format == 'htmltoc'
-					? "$htmldoc -t html --format html $cmd " . escapeshellarg($file) . " "
-					: "$htmldoc -t pdf --format pdf14 $cmd " . escapeshellarg($file) . " ";
+					? "$htmldoc -t html --format html $cmd " . escapeshellarg( $file ) . " "
+					: "$htmldoc -t pdf --format pdf14 $cmd " . escapeshellarg( $file ) . " ";
 
 				// Execute the command outputting to the cache file
 				putenv( "HTMLDOC_NOCGI=1" );
-				shell_exec( "$cmd > " . escapeshellarg($cache) );
+				shell_exec( "$cmd > " . escapeshellarg( $cache ) );
 				unlink( $file );
 			}
 		}
