@@ -18,7 +18,7 @@ class PdfBookHooks {
 	 */
 	public static function onSkinTemplateNavigation( $skin, &$actions ) {
 		global $wgPdfBookTab;
-		if ( $wgPdfBookTab && $skin->getUser()->isLoggedIn() ) {
+		if ( $wgPdfBookTab && $skin->getUser()->isRegistered() ) {
 			$actions['views']['pdfbook'] = [
 				'class' => false,
 				'text' => wfMessage( 'pdfbook-action' )->text(),
