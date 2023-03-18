@@ -15,7 +15,7 @@
 		"wgPdfBookDownload": true,       "@": "Whether the files should be downloaded or view in-browser"
 	},
 	"Hooks": {
-		"SkinTemplateNavigation": ["PdfBookHooks::onSkinTemplateNavigation"]
+		"SkinTemplateNavigation::Universal": ["PdfBookHooks::onSkinTemplateNavigationUniversal"]
 	},
 	"AutoloadClasses": {
 		"PdfBookHooks": "PdfBookHooks.php",

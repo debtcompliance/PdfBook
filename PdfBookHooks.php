@@ -16,7 +16,7 @@ class PdfBookHooks {
 	/**
 	 * Add PDF to actions tabs in skins
 	 */
-	public static function onSkinTemplateNavigation( $skin, &$actions ) {
+	public static function onSkinTemplateNavigationUniversal( $skin, &$actions ) {
 		global $wgPdfBookTab;
 		if ( $wgPdfBookTab && $skin->getUser()->isRegistered() ) {
 			$actions['views']['pdfbook'] = [
@@ -25,7 +25,6 @@ class PdfBookHooks {
 				'href' => self::actionLink( $skin )
 			];
 		}
-		return true;
 	}
 
 	/**
