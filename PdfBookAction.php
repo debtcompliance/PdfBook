@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 class PdfBookAction extends Action {
 
 	public function getName() {
@@ -9,7 +12,7 @@ class PdfBookAction extends Action {
 	 * Perform the export operation
 	 */
 	public function show() {
-		global $wgPdfBookTab, $wgPdfBookDownload, $wgParser, $wgServer, $wgScript,
+		global $wgPdfBookTab, $wgPdfBookDownload, $wgServer, $wgScript,
 			$wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory;
 
 		$user   = $this->getUser();
@@ -18,7 +21,8 @@ class PdfBookAction extends Action {
 		$page   = WikiPage::factory( $title );
 		$book   = $title->getText();
 		$opt    = ParserOptions::newFromUser( $user );
-		$parser = $wgParser->getFreshParser();
+
+		$parser = MediaWikiServices::getInstance()->getParserFactory()->getInstance();
 
 		// Log the export
 		$msg = wfMessage( 'pdfbook-log', $user->getUserPage()->getPrefixedText() )->text();
