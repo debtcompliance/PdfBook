@@ -33,7 +33,7 @@ class PdfBookHooks {
 	public static function actionLink( $skin ) {
 		$qs = 'action=pdfbook&format=single';
 		foreach ( $_REQUEST as $k => $v ) {
-			if ( $k != 'title' ) {
+			if ( $k != 'title' && is_string( $v ) ) {
 				$qs .= "&$k=$v";
 			}
 		}
