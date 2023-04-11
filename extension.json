@@ -1,28 +1,43 @@
 {
 	"name": "PdfBook",
-	"version": "2.0.5, 2021-07-19",
+	"version": "3.0.0-beta",
+	"license-name": "GPL-2.0-or-later",
 	"author": [
-		"[http://www.organicdesign.co.nz/aran Aran Dunkley]",
-		"[http://absorto.dev Igor Absorto]"
+		"[https://organicdesign.nz/User:Nad Aran Dunkley]",
+		"[https://absorto.dev Igor Absorto]",
+		"[https://professional.wiki/en/mediawiki-development Professional Wiki]"
 	],
-	"url": "http://www.mediawiki.org/wiki/Extension:PdfBook",
+	"url": "https://www.mediawiki.org/wiki/Extension:PdfBook",
 	"descriptionmsg": "pdfbook-desc",
-	"license-name": "[https://www.gnu.org/licenses/gpl-2.0.html GNU General Public Licence 2.0] or later",
+	"requires": {
+		"MediaWiki": ">= 1.39.0",
+		"platform": {
+			"php": ">= 8.0"
+		}
+	},
 	"type": "parserhook",
 	"callback": "PdfBookHooks::onRegistration",
 	"config": {
-		"wgPdfBookTab": false,           "@": "Whether or not an action tab is wanted for printing to PDF",
-		"wgPdfBookDownload": true,       "@": "Whether the files should be downloaded or view in-browser"
+		"PdfBookTab": {
+			"description": "Whether or not an action tab should be shown for printing to PDF",
+			"value": false
+		},
+		"PdfBookDownload": {
+			"description": "Whether or not the files should be downloaded or viewed in-browser",
+			"value": true
+		}
 	},
 	"Hooks": {
-		"SkinTemplateNavigation::Universal": ["PdfBookHooks::onSkinTemplateNavigationUniversal"]
+		"SkinTemplateNavigation::Universal": "PdfBookHooks::onSkinTemplateNavigationUniversal"
 	},
 	"AutoloadClasses": {
 		"PdfBookHooks": "PdfBookHooks.php",
 		"PdfBookAction": "PdfBookAction.php"
 	},
 	"MessagesDirs": {
-		"PdfBook": ["i18n"]
+		"PdfBook": [
+			"i18n"
+		]
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }
