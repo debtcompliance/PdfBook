@@ -18,7 +18,7 @@ class PdfBookAction extends Action {
 		$user   = $this->getUser();
 		$output = $this->getOutput();
 		$title  = $this->getTitle();
-		$page   = WikiPage::factory( $title );
+		$page   = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
 		$book   = $title->getText();
 		$opt    = ParserOptions::newFromUser( $user );
 
@@ -66,7 +66,7 @@ class PdfBookAction extends Action {
 		} else {
 			$articles = [];
 			if ( $title->getNamespace() == NS_CATEGORY ) {
-				$db     = wfGetDB( DB_REPLICA );
+				$db     = MediaWikiServices::getInstance()->getDBLoadBalancer()->getMaintenanceConnectionRef( DB_REPLICA );
 				$cat    = $db->addQuotes( $title->getDBkey() );
 				$result = $db->select(
 					'categorylinks',
@@ -75,16 +75,13 @@ class PdfBookAction extends Action {
 					'PdfBook',
 					[ 'ORDER BY' => 'cl_sortkey' ]
 				);
-				if ( $result instanceof IResultWrapper ) {
-					$result = $result->result;
-				}
-				while ( $row = $db->fetchRow( $result ) ) {
+				while ( $row = $result->fetchRow() ) {
 					$articles[] = Title::newFromID( $row[0] );
 				}
 			} else {
 				$text = $page->getContent()->getNativeData();
 				$text = $parser->preprocess( $text, $title, $opt );
-				if ( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^\\|\\]]+)\\s*.*?\\]{2}/m", $text, $links ) ) {
+				if ( preg_match_all( "/^\\*\\s*\\[{2}\\s*([^|\\]]+)\\s*.*?]{2}/m", $text, $links ) ) {
 					foreach ( $links[1] as $link ) {
 						$articles[] = Title::newFromText( $link );
 					}
@@ -119,13 +116,12 @@ class PdfBookAction extends Action {
 			$wgScript = $wgServer . $wgScript;
 			foreach ( $articles as $title ) {
 				if ( is_object( $title ) && $title->exists() ) {
-					$page = WikiPage::factory( $title );
+					$page = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
 					$ttext = $title->getPrefixedText();
-					$turl = $title->getFullUrl();
 					if ( !in_array( $ttext, $exclude ) ) {
 						$text = $page->getContent()->getNativeData();
-						$text = preg_replace( "/<!--([^@]+?)-->/s", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
-						$out = $parser->parse( $text, $title, $opt, true, true );
+						$text = preg_replace( "/<!--([^@]+?)-->/", "@@" . "@@$1@@" . "@@", $text ); // preserve HTML comments
+						$out = $parser->parse( $text, $title, $opt );
 						$text = $out->getText(
 							[
 								// generate TOC if enough headings and format not 'single'
@@ -157,7 +153,7 @@ class PdfBookAction extends Action {
 						$text = preg_replace( "|<div\s*class=['\"]?noprint[\"']?>.+?</div>|s", "", $text );
 
 						// HTML comments hack
-						$text = preg_replace( "|@{4}([^@]+?)@{4}|s", "<!--$1-->", $text );
+						$text = preg_replace( "|@{4}([^@]+?)@{4}|", "<!--$1-->", $text );
 
 						// Make the doc heading spans in to A tags
 						$text = preg_replace_callback(
@@ -206,8 +202,8 @@ class PdfBookAction extends Action {
 					. " --top " . escapeshellarg( $top ) . " --bottom " . escapeshellarg( $bottom )
 					. " --header ... --footer $footer --headfootsize 8 --quiet --jpeg --color"
 					. " --bodyfont " . escapeshellarg( $font ) . " --fontsize " . escapeshellarg( $size )
-					." --fontspacing " . escapeshellarg( $ls ) . " --linkstyle plain --linkcolor " 
-					. escapeshellarg( $linkcol ) . "$toc --no-title $numbering --charset " 
+					." --fontspacing " . escapeshellarg( $ls ) . " --linkstyle plain --linkcolor "
+					. escapeshellarg( $linkcol ) . "$toc --no-title $numbering --charset "
 					. escapeshellarg( $charset ) . " $options $layout $width";
 				$cmd = $format == 'htmltoc'
 					? "$htmldoc -t html --format html $cmd " . escapeshellarg( $file ) . " "
@@ -240,7 +236,7 @@ class PdfBookAction extends Action {
 		if ( isset( $GLOBALS["wgPdfBook$name"] ) ) {
 			$val = $GLOBALS["wgPdfBook$name"];
 		}
-		return preg_replace( '|[^\/-_:.a-z0-9]|i', '', $val );
+		return preg_replace( '|[^/-_.a-z]|i', '', $val );
 	}
 
 	private function setProperty( $name, $val, $prefix = 'pdf' ) {
@@ -257,6 +253,6 @@ class PdfBookAction extends Action {
 		if ( isset( $GLOBALS["wgPdfBook$name"] ) ) {
 			$val = $GLOBALS["wgPdfBook$name"];
 		}
-		return preg_replace( '|[^\/-_:.a-z0-9]|i', '', $val );
+		return preg_replace( '|[^/-_.a-z]|i', '', $val );
 	}
 }
