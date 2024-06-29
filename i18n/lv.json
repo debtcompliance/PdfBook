@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "Drukāt kā PDF",
 	"pdfbook-log": "$1 pārstrādāja šo kā grāmatu PDF failā",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Izveido grāmatu no kategorijā esošajām lapām un pārstrādā to PDF formātā"
 }

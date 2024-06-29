@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "打印为PDF",
 	"pdfbook-log": "$1导出了一个PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "从分类中的页面编写一本书并导出为PDF。"
 }

@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "چاپ به شکل پی‌دی‌اف",
 	"pdfbook-log": "$1 برون‌ریزی بیی به صورت اتا کتاب پی‌دی‌اف",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "از صفحه‌ئون اتا رج کتاب ساجنه و به صورت اتا کتاب پی‌دی‌اف برون‌ریزی کانده"
 }

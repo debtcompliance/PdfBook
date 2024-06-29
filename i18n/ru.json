@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Печать в PDF",
 	"pdfbook-log": "$1 экспортирована как PDF-книга",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Создаёт книгу из страниц категории, преобразует её в PDF"
 }

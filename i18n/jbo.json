@@ -4,5 +4,6 @@
 			"Gleki"
 		]
 	},
-	"pdfbook-action": "zbasu lo PDF fukpi"
+	"pdfbook-action": "zbasu lo PDF fukpi",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system"
 }

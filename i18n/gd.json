@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Dèan PDF dheth",
 	"pdfbook-log": "Rinn $1 às-phortadh 'na leabhar PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Cruthaichidh 's às-phortaichidh seo leabhar PDF dhe na duilleagan ann an roinn-seòrsa"
 }

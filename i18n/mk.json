@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Испечати како PDF",
 	"pdfbook-log": "Извоз на $1 како PDF-книга",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Составува книга од страници во извесна категорија и ја извезува во PDF-формат"
 }

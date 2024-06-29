@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Als PDF drécken",
 	"pdfbook-log": "$1 gouf als PDF-Buch exportéiert",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Setzt e Buch aus Säiten an eng Kategorie an exportéiert se als PDF-Buch"
 }

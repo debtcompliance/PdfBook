@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Als <i lang=\"en\" xml:lang=\"en\" dir=\"ltr\" title=\"Portable Document Format\">PDF</i>-Dattei dröcke",
 	"pdfbook-log": "$1 wood als en Aat Booch en en PDF-Dattei expoteet",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Ställd e Booch zesamme us dä Sigge en ene Saachjropp un expoteed et als en Aat Booch en en PDF-Dattei."
 }

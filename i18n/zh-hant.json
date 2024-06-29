@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "列印為 PDF",
 	"pdfbook-log": "$1 匯出成 PDF 電子書",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "從分類裡的頁面來編寫並匯出成 PDF 電子書"
 }

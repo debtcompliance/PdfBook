@@ -6,5 +6,6 @@
 		]
 	},
 	"pdfbook-action": "Wekî PDF çap bike",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-log": "$1 wekî pirtûkeke PDF hate derxistin"
 }

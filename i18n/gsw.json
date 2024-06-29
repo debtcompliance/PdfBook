@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "As PDF-Datei uusgee",
 	"pdfbook-log": "$1 exportiert as PDF-Buech",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Stellt e Buech vu Syte us ere Kategori zämme un exportiert s as PDF-Buech"
 }

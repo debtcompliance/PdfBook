@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "PDFとして印刷する",
 	"pdfbook-log": "$1をPDFブックとしてエクスポート",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "カテゴリ内のページから本を構築し、PDFブックとしてエクスポートする"
 }

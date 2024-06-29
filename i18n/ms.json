@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Cetak dalam bentuk PDF",
 	"pdfbook-log": "$1 dieksport dalam bentuk buku PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Mengarang buku daripada laman-laman dalam satu kategori lalu mengeksportnya dalam bentuk buku PDF"
 }

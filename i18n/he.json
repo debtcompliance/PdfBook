@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "הדפסה כקובץ PDF",
 	"pdfbook-log": "$1 יוּצָא כספר PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "לערוך ספר מדפים בקטגוריה וייצא אותו כ־PDF"
 }

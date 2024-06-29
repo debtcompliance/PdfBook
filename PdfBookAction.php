@@ -12,7 +12,7 @@ class PdfBookAction extends Action {
 	 * Perform the export operation
 	 */
 	public function show() {
-		global $wgPdfBookTab, $wgPdfBookDownload, $wgServer, $wgScript,
+		global $wgPdfBookTab, $wgPdfBookDownload, $wgServer, $wgScript, $wgOut,
 			$wgArticlePath, $wgScriptPath, $wgUploadPath, $wgUploadDirectory;
 
 		$user   = $this->getUser();
@@ -22,6 +22,18 @@ class PdfBookAction extends Action {
 		$book   = $title->getText();
 		$opt    = ParserOptions::newFromUser( $user );
 
+		/*
+		 * Based on a solution proposed by Peter Nomigkeit
+		 */
+		if ( file_exists( '/usr/bin/htmldoc' ) ) {
+			$htmldocExec = '/usr/bin/htmldoc';
+		} elseif ( file_exists( '/usr/local/bin/htmldoc' ) ) {
+			$htmldocExec = '/usr/local/bin/htmldoc';
+		} else {
+			$wgOut->wrapWikiMsg( '<div class="error">$1</div>', [ 'pdfbook-error-htmldoc-missing' ] );
+			return false;
+		}
+
 		$parser = MediaWikiServices::getInstance()->getParserFactory()->getInstance();
 
 		// Log the export
@@ -30,7 +42,7 @@ class PdfBookAction extends Action {
 		$log->addEntry( 'book', $title, $msg, [], $user );
 
 		// Initialise PDF variables
-		$htmldoc   = $this->setPropertyFromGlobals( 'HtmlDocPath', '/usr/bin/htmldoc' );
+		$htmldoc   = $this->setPropertyFromGlobals( 'HtmlDocPath', $htmldocExec );
 		$format    = $this->setProperty( 'format', '', '' );
 		$nothumbs  = $this->setProperty( 'nothumbs', '', '' );
 		$notitle   = $this->setProperty( 'notitle', '', '' );

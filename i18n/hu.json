@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Nyomtatás PDF formátumban",
 	"pdfbook-log": "$ 1 exportálva PDF-könyvként",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Kiválasztott oldalakat kategóriába helyez, összeállít belőlük egy könyvet, és exportálja PDF-könyvként"
 }

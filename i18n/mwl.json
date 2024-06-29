@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "Amprimir cumo PDF",
 	"pdfbook-log": "$1 sportado cumo un lhibro PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Cumpon-se un lhibro culas páiginas dua catadorie i sporta el cumo un lhibro PDF"
 }

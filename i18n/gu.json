@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "PDF તરીકે છાપો",
 	"pdfbook-log": "$1 એ PDF પુસ્તક તરીકે નિકાસ કર્યું",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "શ્રેણીમાંના પાનાઓમાંથી પુસ્તક સંપાદિત કરી PDF પુસ્તક તરીકે નિકાસ કર્યું"
 }

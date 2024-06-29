@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Stambe cumme a 'nu PDF",
 	"pdfbook-log": "$1 esportate cumme a 'nu libbre in PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Combone 'nu libbre da le pàggene jndr'à 'na categorije e esporte cumme 'nu libbre in PDF"
 }

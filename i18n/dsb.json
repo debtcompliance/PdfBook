@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Ako PDF śišćaś",
 	"pdfbook-log": "$1 jo se ako PDF-knigły eksportěrował",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Staja knigły z bokow w kategoriji gromadu a eksportěrujo je ako PDF-knigły"
 }

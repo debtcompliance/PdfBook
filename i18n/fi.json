@@ -6,5 +6,6 @@
 		]
 	},
 	"pdfbook-action": "Tulosta PDF-tiedostoksi",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-log": "$1 vietiin PDF-kirjaksi"
 }

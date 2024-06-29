@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Druk as PDF",
 	"pdfbook-log": "$1 is as 'n PDF-boek geëksporteer",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Maak 'n boek van bladsye in 'n kategorie en eksporteer as 'n PDF-boek"
 }

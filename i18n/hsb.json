@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Jako PDF ćišćeć",
 	"pdfbook-log": "$1 bu jako PDF-kniha eksportowany",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Zestaja knihu ze stronow w kategoriji a eksportuje jako PDF-knihu"
 }

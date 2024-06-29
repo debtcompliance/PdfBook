@@ -5,5 +5,6 @@
 		]
 	},
 	"pdfbook-action": "Emprimar u format PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-log": "$1 èxportâ desot fôrma de lévro PDF"
 }

@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Штампај као ПДФ",
 	"pdfbook-log": "$1 {{GENDER:$1|извезао|извезла}} као ПДФ књигу",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Ствара књигу од страница у категорији и извози је као ПДФ књигу"
 }

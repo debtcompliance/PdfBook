@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Argraffu ar ffurf PDF",
 	"pdfbook-log": "Mae $1 wedi allforio'r llyfr ar ffurf PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Yn defnyddio tudalennau o rhyw gategori i lunio llyfr, ac allforio hwnnw ar ffurf llyfr PDF"
 }

@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "PDF иттереп бастыру",
 	"pdfbook-log": "$1 PDF китап кебек чыгарылган",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Китапны төркем битләреннән ясый һәм PDF форматында чыгара"
 }

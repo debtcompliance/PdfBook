@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Chapa kwa mtindo wa PDF",
 	"pdfbook-log": "$1 amekipeleka kitabu nje kwa mtindo wa PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Inaunda kurasa za jamii fulani katika kitabu, na kukipeleka nje kwa mtindo wa PDF"
 }

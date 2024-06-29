@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Εκτύπωση ως PDF",
 	"pdfbook-log": "$1 που έχουν εξαχθεί ως βιβλίο PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Συνθέτει ένα βιβλίο από σελίδες σε μια κατηγορία και τις εξάγει ως βιβλίο PDF"
 }

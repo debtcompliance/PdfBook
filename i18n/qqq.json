@@ -8,5 +8,6 @@
 	},
 	"pdfbook-action": "Used as link text for a link to the pdf",
 	"pdfbook-log": "Parameters:\n* $1 - the username of the user who exports the PDF book",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "{{desc|name=PdfBook|url=https://www.mediawiki.org/wiki/Extension:PdfBook}}"
 }

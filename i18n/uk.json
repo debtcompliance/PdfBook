@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Друк у PDF",
 	"pdfbook-log": "$1 експортовано як книгу PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Створює книгу зі сторінок у категорії і експортує як книгу PDF"
 }

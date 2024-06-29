@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "PDF gisa inprimatu",
 	"pdfbook-log": "$1 PDF liburu bezala esportatu da",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Kategoria bateko orriak hartu eta PDF liburu gisa esportatzen ditu"
 }

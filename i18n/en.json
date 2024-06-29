@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Print as PDF",
 	"pdfbook-log": "$1 exported as a PDF book",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Composes a book from pages in a category and exports as a PDF book"
 }

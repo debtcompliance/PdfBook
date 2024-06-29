@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "Зорба оц PDF",
 	"pdfbook-log": "$1 экспортйина PDF-жайна санна",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Кадегари агlонех кхуллу жайна, PDF бараме дерзош"
 }

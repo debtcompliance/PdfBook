@@ -6,5 +6,6 @@
 		]
 	},
 	"pdfbook-action": "পিডিএফ হিসেবে মুদ্রণ",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-log": "$1 পিডিএফ বই হিসেবে তৈরিকৃত"
 }

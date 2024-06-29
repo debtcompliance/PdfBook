@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "Stampa com PDF",
 	"pdfbook-log": "$1 esportà coma lìber PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "A compon un lìber a parte da le pàgine an na categorìa e a lo espòrta com un lìber an PDF"
 }

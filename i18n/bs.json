@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Štampaj kao PDF",
 	"pdfbook-log": "$1 izvezena kao PDF knjiga",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Sastavlja knjigu od stranica u kategoriji i izvozi ih kao PDF knjigu"
 }

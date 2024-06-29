@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Vytlačiť do PDF",
 	"pdfbook-log": "Stránka $1 bola exportovaná ako kniha vo formáte PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Zostavá knihu z stránok v kategórii a exportuje ju vo formáte PDF"
 }

@@ -7,5 +7,6 @@
 	},
 	"pdfbook-action": "PDF로 인쇄",
 	"pdfbook-log": "$1님이 PDF 책으로 내보냈습니다",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "분류에서 문서를 책으로 구성하고 PDF 책으로 내보내기"
 }

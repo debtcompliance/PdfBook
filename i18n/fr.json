@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Imprimer au format PDF",
 	"pdfbook-log": "$1 exporté sous forme de livre PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Compose un livre à partir des pages d’une catégorie et exporte comme un livre au format PDF"
 }

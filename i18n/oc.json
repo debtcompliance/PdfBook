@@ -4,5 +4,6 @@
 			"Cedric31"
 		]
 	},
-	"pdfbook-action": "Imprimir al format PDF"
+	"pdfbook-action": "Imprimir al format PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system"
 }

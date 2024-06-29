@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Skriv ut som PDF",
 	"pdfbook-log": "$1 exporterad som PDF-bok",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Sätter samman en bok från sidorna i en kategori och exporterar dem som PDF"
 }

@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "შენახვა PDF ფორმატში",
 	"pdfbook-log": "$1 ექსპორტირებულია როგორც PDF წიგნი",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "კატეგორიების გვერდებიდან ქმნის წიგნს და გარდაქმნის PDF წიგნად"
 }

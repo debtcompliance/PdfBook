@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Moullañ er furmad PDF",
 	"pdfbook-log": "$1 enporzhiet dindan stumm ul levr PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "A sav ul levr adalek pajennoù ur rummad hag ec'h enporzh anezhañ evel ul levr er furmad PDF"
 }

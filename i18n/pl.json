@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Drukuj do PDF",
 	"pdfbook-log": "wyeksportowano $1 jako książkę w formacie PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Tworzenie książki ze stron kategorii i eksportowanie w formacie PDF"
 }

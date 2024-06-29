@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "Als PDF-Datei ausgeben",
 	"pdfbook-log": "$1 wurde als Zusammenstellung in einer PDF-Datei erstellt",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "Ermöglicht die Erstellung von PDF-Dateien einzelner Seiten oder gesammelt aller in einer Kategorie vorhandener Seiten"
 }

@@ -6,5 +6,6 @@
 	},
 	"pdfbook-action": "طباعة كملف PDF",
 	"pdfbook-log": "تم تصدير $1 ككتاب PDF",
+	"pdfbook-error-htmldoc-missing": "HTMLDoc was not found in your system",
 	"pdfbook-desc": "يؤلف كتابا من صفحات في تصنيف ويصدر ككتاب PDF"
 }
